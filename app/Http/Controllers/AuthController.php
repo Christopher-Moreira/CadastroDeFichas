@@ -61,8 +61,6 @@ class AuthController extends Controller
 {
     $personagens = Auth::user()->personagens()->latest()->get();
     return view('pagina_principal', compact('personagens'));
-
-    
 }
 
     // Logout

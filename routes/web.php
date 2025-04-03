@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PersonagemController; // Adicionei o controller faltante
+use App\Http\Controllers\PersonagemController; 
+
 
 // Rotas públicas (acesso sem autenticação)
 Route::middleware('guest')->group(function () {
@@ -21,4 +22,12 @@ Route::middleware('auth')->group(function () {
     // Rotas de Personagem
     Route::get('/personagens/create', [PersonagemController::class, 'create'])->name('personagens.create');
     Route::post('/personagens', [PersonagemController::class, 'store'])->name('personagens.store');
+
+    Route::get('/personagens/{id}/edit', [PersonagemController::class, 'edit'])->name('personagens.edit');
+    Route::put('/personagens/{id}', [PersonagemController::class, 'update'])->name('personagens.update');
+
+    Route::resource('personagens', 'App\Http\Controllers\PersonagemController')->parameters([
+        'personagens' => 'personagem'
+    ]);
 });
+

@@ -35,6 +35,25 @@
         .create-btn:hover {
             transform: translate(-50%, -50%) scale(1.1);
         }
+
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            border-radius: 15px 15px 0 0;
+        }
+
+        #confirmDelete {
+            transition: all 0.2s ease;
+        }
+
+        #confirmDelete:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -70,26 +89,36 @@
                         </div>
 
                         <!-- Lista de Fichas -->
-                        <!-- Lista de Fichas -->
-<h6 class="mb-3">Minhas Fichas</h6>
-<div class="list-group">
-    @forelse ($personagens as $personagem)
-    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-        <div>
-            <strong>{{ $personagem->personagem_nome }}</strong>
-            <div class="text-muted small">
-                <span class="badge bg-primary me-1">Nível {{ $personagem->level }}</span>
-                <span>{{ $personagem->classe ?? 'Sem classe' }}</span>
-            </div>
-        </div>
-        <i class="bi bi-chevron-right"></i>
-    </a>
-    @empty
-    <div class="list-group-item text-muted">
-        Nenhuma ficha encontrada. Clique no + para criar uma nova!
-    </div>
-    @endforelse
-</div>
+                        <h6 class="mb-3">Minhas Fichas</h6>
+                        <div class="list-group">
+                            @forelse ($personagens as $personagem)
+                            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <a href="{{ route('personagens.edit', ['personagem' => $personagem->id]) }}" class="text-decoration-none flex-grow-1">
+                                    <div>
+                                        <strong>{{ $personagem->personagem_nome }}</strong>
+                                        <div class="text-muted small">
+                                            <span class="badge bg-primary me-1">Nível {{ $personagem->level }}</span>
+                                            <span>Vida {{ $personagem->vida }}%</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="d-flex align-items-center">
+                                    <form method="POST" action="{{ route('personagens.destroy', $personagem->id) }}" class="me-2">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-link text-danger p-0" data-bs-toggle="delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                    <i class="bi bi-chevron-right"></i>
+                                </div>
+                            </div>
+                            @empty
+                            <div class="list-group-item text-muted">
+                                Nenhuma ficha encontrada. Clique no + para criar uma nova!
+                            </div>
+                            @endforelse
+                        </div>
 
                         <!-- Logout -->
                         <div class="mt-4 pt-3 border-top">
@@ -105,5 +134,49 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg">
+                <div class="modal-header border-0">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-2 fs-4"></i>
+                        <h5 class="modal-title" id="confirmationModalLabel">Confirmar exclusão</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <p class="mb-0">Tem certeza que deseja excluir esta ficha permanentemente?</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            let deleteForm = null;
+
+            document.querySelectorAll('[data-bs-toggle="delete"]').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    deleteForm = this.closest('form');
+                    modal.show();
+                });
+            });
+
+            document.getElementById('confirmDelete').addEventListener('click', function() {
+                if (deleteForm) {
+                    deleteForm.submit();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
