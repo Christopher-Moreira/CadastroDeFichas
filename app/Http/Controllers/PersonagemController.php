@@ -115,7 +115,7 @@ class PersonagemController extends Controller
             'xp' => 'nullable|numeric|min:0',
             
             // Imagem
-            'imagens' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'imagens' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8000'
         ], $customMessages);
 
         $personagem = Personagem::findOrFail($id);

@@ -7,12 +7,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        body {
-            background-color: black;
+       body {
+            background-image: url('{{ asset('storage/fichas/ficha100.jpg') }}');
+            background-size: cover;
+            background-position: center;
             color: #ffffff;
-        }
+        }   
         .card {
-            background-color: #1a1a1a;
             color: #ffffff;
         }
         .form-control {
@@ -28,6 +29,10 @@
         .modifier-square {
             background-color: #333333;
             border-color: #444444;
+            padding: 5px 10px;
+            border-radius: 4px;
+            min-width: 40px;
+            text-align: center;
         }
         .health-bar {
             width: 100%;
@@ -75,48 +80,55 @@
 </head>
 <body>
     <div class="container py-5">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Editar Ficha de Personagem</h3>
+        <div class="card shadow" 
+             style="background-image: url('{{ asset('storage/fichas/sanidade100.png') }}');
+                    background-size: cover;
+                    background-position: center;
+                    background-color: rgba(26, 26, 26, 0.8);
+                    background-blend-mode: multiply;">
+            
+            <div class="card-header" style="background-color: rgba(102, 85, 85, 0.8);">
+                <h3 class="mb-0 text-white">Editar Ficha de Personagem</h3>
             </div>
             
-            <div class="card-body">
+            <div class="card-body" style="background-color: rgba(26, 26, 26, 0.7);">
                 <form method="POST" action="{{ route('personagens.update', $personagem->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
                     <!-- Seção de Imagem -->
-                                <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-header bg-secondary text-white">
-                        <h6 class="mb-0">Imagem do Personagem</h6>
-                    </div>
-                    <div class="card-body text-center">
-                        @if($personagem->imagens)
-                            <img id="image-preview" src="{{ asset('storage/' . $personagem->imagens) }}" 
-                                class="img-fluid mb-2 border rounded upload-hover" 
-                                style="max-width: 200px; height: auto;">
-                        @else
-                            <img id="image-preview" src="https://via.placeholder.com/200x200" 
-                                class="img-fluid mb-2 border rounded upload-hover" 
-                                style="max-width: 200px; height: auto;">
-                        @endif
-                        
-                        <input type="file" 
-                            id="imagem" 
-                            name="imagens" 
-                            class="form-control d-none" 
-                            accept="image/*"
-                            onchange="previewImage(event)">
-                        
-                        <button type="button" 
-                                class="btn btn-primary mt-2" 
-                                onclick="document.getElementById('imagem').click()">
-                            <i class="bi bi-upload"></i> Alterar Imagem
-                        </button>
-                    </div>
-                </div>
-            </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card mb-3" style="background-color: rgba(0, 0, 0, 0.5);">
+                                <div class="card-header bg-secondary text-white">
+                                    <h6 class="mb-0">Imagem do Personagem</h6>
+                                </div>
+                                <div class="card-body text-center">
+                                    @if($personagem->imagens)
+                                        <img id="image-preview" src="{{ asset('storage/' . $personagem->imagens) }}" 
+                                            class="img-fluid mb-2 border rounded upload-hover" 
+                                            style="max-width: 200px; height: auto;">
+                                    @else
+                                        <img id="image-preview" src="https://via.placeholder.com/200x200" 
+                                            class="img-fluid mb-2 border rounded upload-hover" 
+                                            style="max-width: 200px; height: auto;">
+                                    @endif
+                                    
+                                    <input type="file" 
+                                        id="imagem" 
+                                        name="imagens" 
+                                        class="form-control d-none" 
+                                        accept="image/*"
+                                        onchange="previewImage(event)">
+                                    
+                                    <button type="button" 
+                                            class="btn btn-primary mt-2" 
+                                            onclick="document.getElementById('imagem').click()">
+                                        <i class="bi bi-upload"></i> Alterar Imagem
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Informações Básicas -->
                         <div class="col-md-9">
@@ -191,44 +203,42 @@
 
                     <!-- Atributos -->
                     <div class="mb-4">
-    <h5 class="mb-3"><i class="bi bi-shield-shaded"></i> Atributos</h5>
-    <div class="row g-3">
-        @foreach ([
-            ['name' => 'forca', 'label' => 'Força', 'value' => $personagem->forca],
-            ['name' => 'coragem', 'label' => 'Coragem', 'value' => $personagem->coragem],
-            ['name' => 'fe', 'label' => 'Fé', 'value' => $personagem->fe],
-            ['name' => 'agilidade', 'label' => 'Agilidade', 'value' => $personagem->agilidade],
-            ['name' => 'furtividade', 'label' => 'Furtividade', 'value' => $personagem->furtividade],
-            ['name' => 'resistencia', 'label' => 'Resistência', 'value' => $personagem->resistencia],
-            ['name' => 'carisma', 'label' => 'Carisma', 'value' => $personagem->carisma],
-            ['name' => 'inteligencia', 'label' => 'Inteligência', 'value' => $personagem->inteligencia],
-            ['name' => 'percepcao', 'label' => 'Percepção', 'value' => $personagem->percepcao]
-        ] as $attr)
-        <div class="col-md-3">
-            <label class="form-label">{{ $attr['label'] }}</label>
-            <div class="attribute-group">
-                <input type="number" class="form-control attribute-input" 
-                       name="{{ $attr['name'] }}" 
-                       min="0" 
-                       max="20" 
-                       value="{{ $attr['value'] }}">
-                <div class="modifier-square" data-for="{{ $attr['name'] }}">
-                    @php
-                        // Cálculo temporário apenas para exibição inicial
-                        $value = $attr['value'];
-                        $modifier = 
-                            $value == 0 ? -2 :
-                            ($value == 1 ? -1 :
-                            ($value >= 2 && $value <= 3 ? 0 :
-                            ($value >= 4 && $value <= 5 ? +1 : +2)));
-                        echo $modifier >= 0 ? "+$modifier" : $modifier;
-                    @endphp
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
+                        <h5 class="mb-3"><i class="bi bi-shield-shaded"></i> Atributos</h5>
+                        <div class="row g-3">
+                            @foreach ([
+                                ['name' => 'forca', 'label' => 'Força', 'value' => $personagem->forca],
+                                ['name' => 'coragem', 'label' => 'Coragem', 'value' => $personagem->coragem],
+                                ['name' => 'fe', 'label' => 'Fé', 'value' => $personagem->fe],
+                                ['name' => 'agilidade', 'label' => 'Agilidade', 'value' => $personagem->agilidade],
+                                ['name' => 'furtividade', 'label' => 'Furtividade', 'value' => $personagem->furtividade],
+                                ['name' => 'resistencia', 'label' => 'Resistência', 'value' => $personagem->resistencia],
+                                ['name' => 'carisma', 'label' => 'Carisma', 'value' => $personagem->carisma],
+                                ['name' => 'inteligencia', 'label' => 'Inteligência', 'value' => $personagem->inteligencia],
+                                ['name' => 'percepcao', 'label' => 'Percepção', 'value' => $personagem->percepcao]
+                            ] as $attr)
+                            <div class="col-md-3">
+                                <label class="form-label">{{ $attr['label'] }}</label>
+                                <div class="attribute-group">
+                                    <input type="number" class="form-control attribute-input" 
+                                           name="{{ $attr['name'] }}" 
+                                           min="0" 
+                                           max="20" 
+                                           value="{{ $attr['value'] }}">
+                                    <div class="modifier-square" data-for="{{ $attr['name'] }}">
+                                        @php
+                                            $modifier = 
+                                                $attr['value'] == 0 ? -2 :
+                                                ($attr['value'] == 1 ? -1 :
+                                                ($attr['value'] >= 2 && $attr['value'] <= 3 ? 0 :
+                                                ($attr['value'] >= 4 && $attr['value'] <= 5 ? +1 : +2)));
+                                            echo $modifier >= 0 ? "+$modifier" : $modifier;
+                                        @endphp
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
 
                     <!-- Inventário -->
                     <div class="mb-4">
