@@ -87,7 +87,7 @@
                     background-color: rgba(26, 26, 26, 0.8);
                     background-blend-mode: multiply;">
             
-            <div class="card-header" style="background-color: rgba(102, 85, 85, 0.8);">
+            <div class="card-header" style="background-color: rgba(37, 37, 37, 0.8);">
                 <h3 class="mb-0 text-white">Editar Ficha de Personagem</h3>
             </div>
             
@@ -141,7 +141,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <label class="form-label">Vida</label>
-                                        <input type="number" id="vida" class="form-control" name="vida" min="0" value="{{ $personagem->vida }}" max="100" oninput="updateHealthBar()">
+                                        <input type="number" id="vida" class="form-control" name="vida" min="0" value="{{ $personagem->vida }}" max="1000" oninput="updateHealthBar()">
                                         <div class="health-bar mt-2">
                                             <div id="health-bar-inner" class="health-bar-inner"></div>
                                         </div>
@@ -256,6 +256,40 @@
     </div>
 
     <script>
+        
+        //SETS
+const sanityBg100 = "{{ asset('storage/fichas/ficha100.jpg') }}";
+const sanityBg50 = "{{ asset('storage/fichas/ficha50.jpeg') }}";
+const sanityBg25 = "{{ asset('storage/fichas/ojos.gif') }}";
+
+// Função para atualizar o fundo baseado na sanidade
+function updateSanityBackground(sanityValue) {
+    const cardElement = document.querySelector('.card.shadow');
+    const bodyElement = document.body; // Seleciona o body
+    let bgImage = sanityBg100;
+    
+    if (sanityValue < 30) {
+        bgImage = sanityBg25;
+    } else if (sanityValue < 55) {
+        bgImage = sanityBg50;
+    }
+    
+    cardElement.style.backgroundImage = `url('${bgImage}')`;
+    bodyElement.style.backgroundImage = `url('${bgImage}')`; // Atualiza o fundo da página
+}
+
+// Atualizar ao carregar a página
+document.addEventListener('DOMContentLoaded', function () {
+    const initialSanity = parseInt(document.querySelector('input[name="sanidade"]').value) || 100;
+    updateSanityBackground(initialSanity);
+});
+
+// Ouvinte de evento para alterações na sanidade
+document.querySelector('input[name="sanidade"]').addEventListener('input', function (e) {
+    const sanityValue = parseInt(e.target.value) || 0;
+    updateSanityBackground(sanityValue);
+});
+
         // Health Bar
         function updateHealthBar() {
             const vida = document.getElementById('vida').value;

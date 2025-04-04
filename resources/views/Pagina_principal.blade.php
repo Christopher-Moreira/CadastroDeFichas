@@ -3,131 +3,208 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RPG - Página Principal</title>
+    <title>RPG Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        .profile-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a8a5e6;
+            --accent-color: #ff7675;
         }
-        
-        .create-btn {
-            width: 80px;
-            height: 80px;
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg,rgb(223, 223, 223) 0%,rgb(146, 146, 146) 100%);
+            min-height: 100vh;
+        }
+
+        .profile-card {
+            background: linear-gradient(45deg, var(--primary-color), #857ddb);
+            border-radius: 15px;
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .create-btn {
+            width: 100px;
+            height: 100px;
+            background: var(--primary-color);
+            border: none;
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
             transition: all 0.3s ease;
         }
 
         .create-btn:hover {
-            transform: translate(-50%, -50%) scale(1.1);
+            transform: scale(1.1) rotate(90deg);
+            background: var(--primary-color);
+            box-shadow: 0 12px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .character-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .health-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .health-progress {
+            height: 100%;
+            background: linear-gradient(90deg,rgb(126, 216, 126),rgba(18, 153, 97, 0.48));
+            transition: width 0.5s ease;
+        }
+
+        .level-badge {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 20px;    
+            padding: 4px 12px;
+            font-size: 0.8rem;
         }
 
         .modal-content {
-            border-radius: 15px;
             border: none;
+            border-radius: 20px;
+            overflow: hidden;
         }
 
-        .modal-header {
-            background-color: #f8f9fa;
-            border-radius: 15px 15px 0 0;
+        .logout-btn {
+            background: rgba(255, 118, 117, 0.1);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            transition: all 0.3s ease;
         }
 
-        #confirmDelete {
-            transition: all 0.2s ease;
+        .logout-btn:hover {
+            background: var(--accent-color);
+            color: white;
         }
 
-        #confirmDelete:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+        .empty-state {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .empty-state:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 <body class="bg-light">
-    <div class="container-fluid mt-5">
-        <div class="row">
-            <!-- Conteúdo Principal -->
-            <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-body" style="height: 80vh;">
-                        <button onclick="window.location.href='{{ route('personagens.create') }}'" class="btn btn-primary create-btn">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
-                        <div class="text-center mt-5 pt-5">
-                            <small class="text-muted">Clique no botão + para criar uma nova ficha</small>
+    <div class="container-fluid py-5">
+        <div class="row g-4">
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="profile-card mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="profile-pic me-3">
+                            <i class="bi bi-dice-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0">{{ Auth::user()->name }}</h3>
+                            <small class="opacity-75">Roleplayer Level {{ Auth::user()->id }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="mb-3 fw-bold text-primary">Personagens</h5>
+                        
+                        <div class="list-group list-group-flush">
+    @forelse ($personagens as $personagem)
+    <div class="list-group-item character-card p-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0 fw-bold">{{ $personagem->personagem_nome }}</h6>
+                    <span class="level-badge">Nv. {{ $personagem->level }}</span>
+                </div>
+                <div class="health-bar">
+                    <div class="health-progress" style="width: {{ $personagem->vida }}%"></div>
+                </div>
+            </div>
+            <div class="ms-3 d-flex gap-2">
+                <button onclick="window.location.href='{{ route('personagens.edit', $personagem->id) }}'" 
+                    class="btn btn-link text-primary p-0">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <form method="POST" action="{{ route('personagens.destroy', $personagem->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-link text-danger p-0" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#confirmationModal">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    @empty
+    <div class="text-center py-4 empty-state">
+        <i class="bi bi-journal-x fs-1"></i>
+        <p class="mt-2 mb-0">Nenhum personagem criado</p>
+    </div>
+    @endforelse
+</div>
+
+                        <div class="mt-4 pt-2">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="btn logout-btn w-100 fw-bold">
+                                    <i class="bi bi-box-arrow-left me-2"></i>Sair da Aventura
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Barra Lateral -->
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <!-- Perfil do Usuário -->
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="profile-circle me-3">
-                                <i class="bi bi-person-fill text-secondary"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">{{ Auth::user()->name }}</h5>
-                                <small class="text-muted">Jogador</small>
-                            </div>
-                        </div>
-
-                        <!-- Lista de Fichas -->
-                        <h6 class="mb-3">Minhas Fichas</h6>
-                        <div class="list-group">
-                            @forelse ($personagens as $personagem)
-                            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <a href="{{ route('personagens.edit', ['personagem' => $personagem->id]) }}" class="text-decoration-none flex-grow-1">
-                                    <div>
-                                        <strong>{{ $personagem->personagem_nome }}</strong>
-                                        <div class="text-muted small">
-                                            <span class="badge bg-primary me-1">Nível {{ $personagem->level }}</span>
-                                            <span>Vida {{ $personagem->vida }}%</span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="d-flex align-items-center">
-                                    <form method="POST" action="{{ route('personagens.destroy', $personagem->id) }}" class="me-2">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-link text-danger p-0" data-bs-toggle="delete">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                    <i class="bi bi-chevron-right"></i>
-                                </div>
-                            </div>
-                            @empty
-                            <div class="list-group-item text-muted">
-                                Nenhuma ficha encontrada. Clique no + para criar uma nova!
-                            </div>
-                            @endforelse
-                        </div>
-
-                        <!-- Logout -->
-                        <div class="mt-4 pt-3 border-top">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                    <i class="bi bi-box-arrow-left me-2"></i>Sair
-                                </button>
-                            </form>
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <div class="text-center">
+                            <button onclick="window.location.href='{{ route('personagens.create') }}'" 
+                                class="btn btn-primary create-btn rounded-circle">
+                                <i class="bi bi-plus-lg fs-1"></i>
+                            </button>
+                            <h4 class="mt-4 fw-bold text-secondary">Comece sua Jornada</h4>
+                            <p class="text-muted">Crie um novo personagem para explorar mundos desconhecidos</p>
                         </div>
                     </div>
                 </div>
@@ -135,23 +212,20 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmação -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content shadow-lg">
-                <div class="modal-header border-0">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-exclamation-triangle-fill text-warning me-2 fs-4"></i>
-                        <h5 class="modal-title" id="confirmationModalLabel">Confirmar exclusão</h5>
+            <div class="modal-content">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-exclamation-triangle-fill text-danger fs-1"></i>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body py-4">
-                    <p class="mb-0">Tem certeza que deseja excluir esta ficha permanentemente?</p>
-                </div>
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">Excluir</button>
+                    <h4 class="mb-3">Excluir Personagem?</h4>
+                    <p class="text-muted">Esta ação é permanente e não pode ser desfeita.</p>
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger px-4" id="confirmDelete">Excluir</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -163,11 +237,9 @@
             const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
             let deleteForm = null;
 
-            document.querySelectorAll('[data-bs-toggle="delete"]').forEach(button => {
+            document.querySelectorAll('[data-bs-target="#confirmationModal"]').forEach(button => {
                 button.addEventListener('click', function(e) {
-                    e.preventDefault();
                     deleteForm = this.closest('form');
-                    modal.show();
                 });
             });
 

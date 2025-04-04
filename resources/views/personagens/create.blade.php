@@ -154,7 +154,7 @@
                                     </div>
                         <div class="col-md-2">
                             <label class="form-label">Vida</label>
-                            <input type="number" id="vida" class="form-control" name="vida" min="0" value="100" max="100" oninput="updateHealthBar()">
+                            <input type="number" id="vida" class="form-control" name="vida" min="0" value="100" max="1000" oninput="updateHealthBar()">
                             <div class="health-bar mt-2">
                                 <div id="health-bar-inner" class="health-bar-inner"></div>
                             </div>
@@ -176,7 +176,7 @@
                         </div>
                         <div class="col-md-1">
                             <label class="form-label">Idade</label>
-                            <input type="number" class="form-control" name="idade" min="1">
+                            <input type="number" class="form-control" name="idade" min="1" max "100" vale="1">
                         </div>
                     </div>
                 </div>
