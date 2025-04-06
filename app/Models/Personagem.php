@@ -34,7 +34,13 @@ protected $fillable = [
     'mochila',
     'sanidade',      
     'xp',
-    'imagens'
+    'imagens',
+    'anotacoes',
+    'ocultismo',       
+    'arcanismo', 
+    'investigacao', 
+    'primeirossocorros', 
+    'tecnologia'
 ];
 
 public function user()

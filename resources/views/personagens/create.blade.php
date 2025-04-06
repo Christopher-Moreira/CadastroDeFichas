@@ -111,7 +111,7 @@
 
                             <!-- Seção de Imagem -->
                             <div class="row mb-4">
-                                <!-- Coluna da Imagem -->
+                             
                           
         <div class="col-md-3">
             <div class="card mb-3">
@@ -214,7 +214,7 @@
                     </div>
 
                     <!-- Atributos -->
-                    <div class="mb-4">
+                        <div class="mb-4">
                         <h5 class="mb-3"><i class="bi bi-shield-shaded"></i> Atributos</h5>
                         <div class="row g-3">
                             <!-- Column 1 -->
@@ -288,27 +288,86 @@
                             
                             </div>
                         </div>
-                    </div>
+                                
+                             <!-- Perícias -->
+<div class="mb-4">
+    <h5 class="mb-3"><i class="bi bi-stars"></i> Perícias</h5>
+    <div class="row g-3">
+        <!-- Primeira Linha -->
+        <div class="col-md-3">
+            <label class="form-label">Ocultismo</label>
+            <div class="attribute-group">
+                <input type="number" 
+                    class="form-control attribute-input" 
+                    name="ocultismo" 
+                    min="0" 
+                    max="20" 
+                    value="0">
+                <div class="modifier-square" data-for="ocultismo">0</div>
+            </div>
+        </div>
 
-                    <!-- Inventário -->
-                    <div class="mb-4">
-                        <h5 class="mb-3"><i class="bi bi-backpack"></i> Inventário & Sanidade</h5>
-                        <div class="row g-3">
-                            <div class="col-md-8">
-                                <label class="form-label">Mochila (Itens)</label>
-                                <textarea class="form-control" name="mochila" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-md-3">
+            <label class="form-label">Arcanismo</label>
+            <div class="attribute-group">
+                <input type="number" 
+                    class="form-control attribute-input" 
+                    name="arcanismo" 
+                    min="0" 
+                    max="20" 
+                    value="0">
+                <div class="modifier-square" data-for="arcanismo">0</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Investigação</label>
+            <div class="attribute-group">
+                <input type="number" 
+                    class="form-control attribute-input" 
+                    name="investigacao" 
+                    min="0" 
+                    max="20" 
+                    value="0">
+                <div class="modifier-square" data-for="investigacao">0</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Tecnologia</label>
+            <div class="attribute-group">
+                <input type="number" 
+                    class="form-control attribute-input" 
+                    name="tecnologia" 
+                    min="0" 
+                    max="20" 
+                    value="0">
+                <div class="modifier-square" data-for="tecnologia">0</div>
+            </div>
+        </div>
+
+        <!-- Segunda Linha -->
+        <div class="col-md-3">
+            <label class="form-label">Primeiros Socorros</label>
+            <div class="attribute-group">
+                <input type="number" 
+                    class="form-control attribute-input" 
+                    name="primeirossocorros" 
+                    min="0" 
+                    max="20" 
+                    value="0">
+                <div class="modifier-square" data-for="primeirossocorros">0</div>
+            </div>
+        </div>
+    </div>
+</div>
 
                     <div class="d-flex justify-content-between mt-5">
                         <a href="{{ route('pagina.principal') }}" class="btn btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Salvar Personagem</button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
+    
 
     <script>
         // Health Bar Update

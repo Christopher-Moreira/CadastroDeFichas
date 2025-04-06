@@ -6,13 +6,14 @@
     <title>Editar Ficha de Personagem</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-       body {
+        body {
             background-image: url('{{ asset('storage/fichas/ficha100.jpg') }}');
             background-size: cover;
             background-position: center;
             color: #ffffff;
-        }   
+        }
         .card {
             color: #ffffff;
         }
@@ -76,6 +77,63 @@
         .upload-hover:hover::after {
             opacity: 1;
         }
+        /* Estilos para as cortinas */
+        .curtain-menu {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        .curtain-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 1;
+            height: 78.8%;
+            width: 400px;
+            background-color: rgba(26, 26, 26, 0.95);
+            transition: right 0.3s ease-in-out;
+            z-index: 999;
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
+        .curtain-sidebar.open {
+            right: 0;
+        }
+        
+
+     
+        
+        .bottom-menu {
+            position: fixed;
+            top: 15px;
+            left: 20px; 
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Efeito de transição para os botões da cortina */
+        .curtain-button {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .curtain-button:hover {
+            transform: scale(1.05); 
+            background-color: #343a40 !important;
+        }
+        
+        /* Animação de abertura da cortina */
+        @keyframes curtainReveal {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .curtain-sidebar.open .curtain-content {
+            animation: curtainReveal 0.5s forwards ease-out;
+        }
     </style>
 </head>
 <body>
@@ -92,9 +150,88 @@
             </div>
             
             <div class="card-body" style="background-color: rgba(26, 26, 26, 0.7);">
-                <form method="POST" action="{{ route('personagens.update', $personagem->id) }}" enctype="multipart/form-data">
+              
+                <form id="personagemForm" method="POST" action="{{ route('personagens.update', $personagem->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+
+                    <!-- Menu da Cortina Superior -->
+                    <div class="curtain-menu">
+                        <button type="button" class="btn btn-dark curtain-button" onclick="toggleCurtain('descricao-sidebar')">
+                            <i class="fa-solid fa-user"></i> Descrição
+                        </button>
+                        <button type="button" class="btn btn-dark curtain-button" onclick="toggleCurtain('inventario-sidebar')">
+                           <i class="bi bi-backpack" style="margin-right: 10px;"></i>Inventário
+                        </button>
+                        <button type="button" class="btn btn-dark curtain-button" onclick="toggleCurtain('anotacoes-sidebar')">
+                            <i class="bi bi-journal-text"></i> Anotações
+                        </button>
+                    </div>
+
+                    <!-- Sidebar da Descrição (direita) -->
+                    <div id="descricao-sidebar" class="curtain-sidebar">
+                    
+                        </span>
+                        <div class="curtain-content">
+                            <h4 class="text-white mb-4"><i class="bi bi-card-text"></i> Detalhes Adicionais</h4>
+                            
+                            <!-- Características Físicas -->
+                            <div class="mb-4">
+                                <h5 class="mb-3 text-white"><i class="bi bi-body-text"></i> Características Físicas</h5>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label">Cor dos Olhos</label>
+                                        <input type="text" class="form-control" name="cor_olhos" value="{{ $personagem->cor_olhos }}">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Cabelo</label>
+                                        <input type="text" class="form-control" name="cabelo" value="{{ $personagem->cabelo }}">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Altura (cm)</label>
+                                        <input type="number" class="form-control" name="altura" value="{{ $personagem->altura }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Descrição e História -->
+                            <div class="mb-4">
+                                <h5 class="mb-3 text-white"><i class="bi bi-book"></i> Descrição e História</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Descrição Física</label>
+                                    <textarea class="form-control" name="descricao" rows="3">{{ $personagem->descricao }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">História (Lore)</label>
+                                    <textarea class="form-control" name="lore" rows="3">{{ $personagem->lore }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar do Inventário-->
+                                <div id="inventario-sidebar" class="curtain-sidebar">
+                            
+                                    </span>
+                                    <div class="curtain-content">
+                                        <h4 class="text-white mb-4"><i class="bi bi-backpack"></i> Inventário</h4>
+                                        
+                                        <div class="mb-4">
+                                            <label class="form-label">Itens na Mochila</label>
+                                            <textarea class="form-control" name="mochila" rows="6">{{ $personagem->mochila }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="anotacoes-sidebar" class="curtain-sidebar">
+                <div class="curtain-content">
+                    <h4 class="text-white mb-4"><i class="bi bi-journal-text"></i> Anotações</h4>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Notas do Personagem</label>
+                        <textarea class="form-control" name="anotacoes" rows="12">{{ $personagem->anotacoes ?? '' }}</textarea>
+                    </div>
+                </div>
+            </div>
 
                     <!-- Seção de Imagem -->
                     <div class="row">
@@ -166,43 +303,11 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Características Físicas -->
-                            <div class="mb-4">
-                                <h5 class="mb-3"><i class="bi bi-body-text"></i> Características Físicas</h5>
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label">Cor dos Olhos</label>
-                                        <input type="text" class="form-control" name="cor_olhos" value="{{ $personagem->cor_olhos }}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Cabelo</label>
-                                        <input type="text" class="form-control" name="cabelo" value="{{ $personagem->cabelo }}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Altura (cm)</label>
-                                        <input type="number" class="form-control" name="altura" value="{{ $personagem->altura }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Descrição e História -->
-                    <div class="mb-4">
-                        <h5 class="mb-3"><i class="bi bi-book"></i> Descrição e História</h5>
-                        <div class="mb-3">
-                            <label class="form-label">Descrição Física</label>
-                            <textarea class="form-control" name="descricao" rows="3">{{ $personagem->descricao }}</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">História (Lore)</label>
-                            <textarea class="form-control" name="lore" rows="3">{{ $personagem->lore }}</textarea>
                         </div>
                     </div>
 
                     <!-- Atributos -->
-                    <div class="mb-4">
+                    <div class="mb-4">;
                         <h5 class="mb-3"><i class="bi bi-shield-shaded"></i> Atributos</h5>
                         <div class="row g-3">
                             @foreach ([
@@ -240,12 +345,42 @@
                         </div>
                     </div>
 
-                    <!-- Inventário -->
                     <div class="mb-4">
-                        <h5 class="mb-3"><i class="bi bi-backpack"></i> Inventário</h5>
-                        <textarea class="form-control" name="mochila" rows="3">{{ $personagem->mochila }}</textarea>
-                    </div>
+    <h5 class="mb-3"><i class="bi bi-stars"></i> Perícias</h5>
+    <div class="row g-3">
+        @foreach ([
+            ['name' => 'ocultismo', 'label' => 'Ocultismo'],
+            ['name' => 'arcanismo', 'label' => 'Arcanismo'],
+            ['name' => 'investigacao', 'label' => 'Investigação'],
+            ['name' => 'primeirossocorros', 'label' => 'Primeiros Socorros'],
+            ['name' => 'tecnologia', 'label' => 'Tecnologia']
+        ] as $skill)
+        <div class="col-md-3">
+            <label class="form-label">{{ $skill['label'] }}</label>
+            <div class="attribute-group">
+                <input type="number" class="form-control attribute-input" 
+                       name="{{ $skill['name'] }}" 
+                       min="0" 
+                       max="20" 
+                       value="{{ $personagem->{$skill['name']} ?? '' }}">
+                <div class="modifier-square" data-for="{{ $skill['name'] }}">
+                    @php
+                        $value = $personagem->{$skill['name']} ?? 0;
+                        $modifier = 
+                            $value == 0 ? -2 :
+                            ($value == 1 ? -1 :
+                            ($value >= 2 && $value <= 3 ? 0 :
+                            ($value >= 4 && $value <= 5 ? +1 : +2)));
+                        echo $modifier >= 0 ? "+$modifier" : $modifier;
+                    @endphp
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
 
+                    <!-- Botões de submit mantidos iguais -->
                     <div class="d-flex justify-content-between mt-5">
                         <a href="{{ route('pagina.principal') }}" class="btn btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Atualizar Personagem</button>
@@ -255,40 +390,28 @@
         </div>
     </div>
 
+
     <script>
-        
-        //SETS
-const sanityBg100 = "{{ asset('storage/fichas/ficha100.jpg') }}";
-const sanityBg50 = "{{ asset('storage/fichas/ficha50.jpeg') }}";
-const sanityBg25 = "{{ asset('storage/fichas/ojos.gif') }}";
+        // Função para alternar cortinas
+        function toggleCurtain(sidebarId) {
+            const sidebar = document.getElementById(sidebarId);
+            sidebar.classList.toggle('open');
+        }
 
-// Função para atualizar o fundo baseado na sanidade
-function updateSanityBackground(sanityValue) {
-    const cardElement = document.querySelector('.card.shadow');
-    const bodyElement = document.body; // Seleciona o body
-    let bgImage = sanityBg100;
-    
-    if (sanityValue < 30) {
-        bgImage = sanityBg25;
-    } else if (sanityValue < 55) {
-        bgImage = sanityBg50;
-    }
-    
-    cardElement.style.backgroundImage = `url('${bgImage}')`;
-    bodyElement.style.backgroundImage = `url('${bgImage}')`; // Atualiza o fundo da página
-}
+        // Fechar cortinas ao clicar fora
+        document.addEventListener('click', function(event) {
+            const openSidebars = document.querySelectorAll('.curtain-sidebar.open');
+            if (openSidebars.length === 0) return;
 
-// Atualizar ao carregar a página
-document.addEventListener('DOMContentLoaded', function () {
-    const initialSanity = parseInt(document.querySelector('input[name="sanidade"]').value) || 100;
-    updateSanityBackground(initialSanity);
-});
+            const isClickInside = Array.from(openSidebars).some(sidebar => 
+                sidebar.contains(event.target)
+            );
+            const isCurtainButton = event.target.closest('.curtain-button');
 
-// Ouvinte de evento para alterações na sanidade
-document.querySelector('input[name="sanidade"]').addEventListener('input', function (e) {
-    const sanityValue = parseInt(e.target.value) || 0;
-    updateSanityBackground(sanityValue);
-});
+            if (!isClickInside && !isCurtainButton) {
+                openSidebars.forEach(sidebar => sidebar.classList.remove('open'));
+            }
+        });
 
         // Health Bar
         function updateHealthBar() {
@@ -303,7 +426,7 @@ document.querySelector('input[name="sanidade"]').addEventListener('input', funct
         }
         updateHealthBar();
 
-        // Modifiers Calculation
+        // Cálculo de modificadores
         function calculateModifier(value) {
             value = parseInt(value) || 0;
             if (value === 0) return -2;
@@ -326,7 +449,7 @@ document.querySelector('input[name="sanidade"]').addEventListener('input', funct
             });
         }
 
-        // Image Preview
+        // Pré-visualização de imagem
         function previewImage(event) {
             const reader = new FileReader();
             reader.onload = function() {
@@ -339,7 +462,43 @@ document.querySelector('input[name="sanidade"]').addEventListener('input', funct
         document.querySelectorAll('.attribute-input').forEach(input => {
             input.addEventListener('input', updateModifiers);
         });
-        updateModifiers();
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            updateModifiers();
+            const sidebars = document.querySelectorAll('.curtain-sidebar');
+            sidebars.forEach(sidebar => sidebar.classList.remove('open'));
+        });
+
+        // Atualização do fundo baseado na sanidade
+        const sanityBg100 = "{{ asset('storage/fichas/ficha100.jpg') }}";
+        const sanityBg50 = "{{ asset('storage/fichas/ficha50.jpeg') }}";
+        const sanityBg25 = "{{ asset('storage/fichas/ojos.gif') }}";
+
+        function updateSanityBackground(sanityValue) {
+            const cardElement = document.querySelector('.card.shadow');
+            const bodyElement = document.body;
+            let bgImage = sanityBg100;
+            
+            if (sanityValue < 30) {
+                bgImage = sanityBg25;
+            } else if (sanityValue < 55) {
+                bgImage = sanityBg50;
+            }
+            
+            cardElement.style.backgroundImage = `url('${bgImage}')`;
+            bodyElement.style.backgroundImage = `url('${bgImage}')`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const initialSanity = parseInt(document.querySelector('input[name="sanidade"]').value) || 100;
+            updateSanityBackground(initialSanity);
+        });
+
+        document.querySelector('input[name="sanidade"]').addEventListener('input', function (e) {
+            const sanityValue = parseInt(e.target.value) || 0;
+            updateSanityBackground(sanityValue);
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

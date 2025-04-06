@@ -52,7 +52,14 @@ class PersonagemController extends Controller
             'xp' => 'nullable|numeric|min:0',
             
             // Imagem
-            'imagens' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'imagens' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'anotacoes' => 'nullable|string',
+
+            'ocultismo' => 'nullable|integer',
+            'arcanismo' => 'nullable|integer', 
+            'investigacao' => 'nullable|integer', 
+            'primeirossocorros' => 'nullable|integer',
+            'tecnologia' => 'nullable|integer'
         ], $customMessages);
 
         // Tratamento da imagem
@@ -115,7 +122,18 @@ class PersonagemController extends Controller
             'xp' => 'nullable|numeric|min:0',
             
             // Imagem
-            'imagens' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8000'
+            'imagens' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8000',
+
+            'anotacoes' => 'nullable|string',
+
+                    
+            'ocultismo' => 'nullable|integer',
+            'arcanismo' => 'nullable|integer', 
+            'investigacao' => 'nullable|integer', 
+            'primeirossocorros' => 'nullable|integer',
+            'tecnologia' => 'nullable|integer'
+
+
         ], $customMessages);
 
         $personagem = Personagem::findOrFail($id);
