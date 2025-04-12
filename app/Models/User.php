@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'segregacao',
+    
     ];
 
     /**
@@ -40,6 +42,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'can_be_admin' => 'boolean',
+        'can_be_user' => 'boolean',
     ];
 
     public function personagens()

@@ -52,7 +52,7 @@ class PersonagemController extends Controller
             'xp' => 'nullable|numeric|min:0',
             
             // Imagem
-            'imagens' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagens' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff|max:2048',
             'anotacoes' => 'nullable|string',
 
             'ocultismo' => 'nullable|integer',

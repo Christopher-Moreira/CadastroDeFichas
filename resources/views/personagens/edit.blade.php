@@ -191,6 +191,10 @@
                                         <label class="form-label">Altura (cm)</label>
                                         <input type="number" class="form-control" name="altura" value="{{ $personagem->altura }}">
                                     </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Idade</label>
+                                        <input type="number" class="form-control" name="idade" value="{{ $personagem->idade }}">
+                                    </div>
                                 </div>
                             </div>
 
@@ -297,17 +301,13 @@
                                         <label class="form-label">XP</label>
                                         <input type="number" class="form-control" name="xp" min="0" value="{{ $personagem->xp }}" required>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Idade</label>
-                                        <input type="number" class="form-control" name="idade" value="{{ $personagem->idade }}">
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Atributos -->
-                    <div class="mb-4">;
+                    <div class="mb-4">
                         <h5 class="mb-3"><i class="bi bi-shield-shaded"></i> Atributos</h5>
                         <div class="row g-3">
                             @foreach ([
@@ -345,42 +345,41 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
-    <h5 class="mb-3"><i class="bi bi-stars"></i> Perícias</h5>
-    <div class="row g-3">
-        @foreach ([
-            ['name' => 'ocultismo', 'label' => 'Ocultismo'],
-            ['name' => 'arcanismo', 'label' => 'Arcanismo'],
-            ['name' => 'investigacao', 'label' => 'Investigação'],
-            ['name' => 'primeirossocorros', 'label' => 'Primeiros Socorros'],
-            ['name' => 'tecnologia', 'label' => 'Tecnologia']
-        ] as $skill)
-        <div class="col-md-3">
-            <label class="form-label">{{ $skill['label'] }}</label>
-            <div class="attribute-group">
-                <input type="number" class="form-control attribute-input" 
-                       name="{{ $skill['name'] }}" 
-                       min="0" 
-                       max="20" 
-                       value="{{ $personagem->{$skill['name']} ?? '' }}">
-                <div class="modifier-square" data-for="{{ $skill['name'] }}">
-                    @php
-                        $value = $personagem->{$skill['name']} ?? 0;
-                        $modifier = 
-                            $value == 0 ? -2 :
-                            ($value == 1 ? -1 :
-                            ($value >= 2 && $value <= 3 ? 0 :
-                            ($value >= 4 && $value <= 5 ? +1 : +2)));
-                        echo $modifier >= 0 ? "+$modifier" : $modifier;
-                    @endphp
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="bi bi-stars"></i> Perícias</h5>
+                    <div class="row g-3">
+                        @foreach ([
+                            ['name' => 'ocultismo', 'label' => 'Ocultismo'],
+                            ['name' => 'arcanismo', 'label' => 'Arcanismo'],
+                            ['name' => 'investigacao', 'label' => 'Investigação'],
+                            ['name' => 'primeirossocorros', 'label' => 'Primeiros Socorros'],
+                            ['name' => 'tecnologia', 'label' => 'Tecnologia']
+                        ] as $skill)
+                        <div class="col-md-3">
+                            <label class="form-label">{{ $skill['label'] }}</label>
+                            <div class="attribute-group">
+                                <input type="number" class="form-control attribute-input" 
+                                    name="{{ $skill['name'] }}" 
+                                    min="0" 
+                                    max="20" 
+                                    value="{{ $personagem->{$skill['name']} ?? '' }}">
+                                <div class="modifier-square" data-for="{{ $skill['name'] }}">
+                                    @php
+                                        $value = $personagem->{$skill['name']} ?? 0;
+                                        $modifier = 
+                                            $value == 0 ? -2 :
+                                            ($value == 1 ? -1 :
+                                            ($value >= 2 && $value <= 3 ? 0 :
+                                            ($value >= 4 && $value <= 5 ? +1 : +2)));
+                                        echo $modifier >= 0 ? "+$modifier" : $modifier;
+                                    @endphp
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
 
-                    <!-- Botões de submit mantidos iguais -->
                     <div class="d-flex justify-content-between mt-5">
                         <a href="{{ route('pagina.principal') }}" class="btn btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Atualizar Personagem</button>
