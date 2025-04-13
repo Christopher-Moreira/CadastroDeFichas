@@ -226,14 +226,13 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Conteúdo Principal -->
+                    <!-- Conteúdo Principal -->
                             <div class="col-lg-8">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body d-flex flex-column justify-content-center">
                                         <div class="row g-4 text-center">
                                             <!-- Botão Criar Sala -->
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <button onclick="window.location.href='{{ route('salas.sala_create') }}'"  
                                                     class="btn btn-success create-btn rounded-circle">
                                                     <i class="bi bi-plus-lg fs-1"></i>
@@ -243,7 +242,7 @@
                                             </div>
                                             
                                             <!-- Botão Entrar em Sala -->
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <button onclick="window.location.href='{{ route('salas.sala_join') }}'"
                                                     class="btn btn-primary create-btn rounded-circle">
                                                     <i class="bi bi-door-open fs-1"></i>
@@ -251,12 +250,20 @@
                                                 <h4 class="mt-4 fw-bold text-secondary">Entrar em Sala</h4>
                                                 <p class="text-muted">Junte-se a uma aventura em andamento</p>
                                             </div>
+
+                                            <!-- Salas Criadas -->
+                                            <div class="col-md-4">
+                                                <button onclick=""
+                                                    class="btn btn-info create-btn rounded-circle">
+                                                    <i class="bi bi-list-ul fs-1"></i>
+                                                </button>
+                                                <h4 class="mt-4 fw-bold text-secondary">Salas Criadas</h4>
+                                                <p class="text-muted">Veja suas aventuras em andamento!</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
                     <!-- Modal de Confirmação -->
                     <div class="modal fade" id="confirmationModal" tabindex="-1">

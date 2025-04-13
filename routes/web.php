@@ -37,14 +37,23 @@ Route::middleware(['auth'])->group(function () {
         return view('Pagina_admin');
     })->name('admin.dashboard');
 
+   //Rotas da sala 
     
     Route::prefix('salas')->group(function () {
+        // routes/web.php
+        Route::get('/rooms/{code}/select-character', [RoomController::class, 'selectCharacter'])->name('rooms.select_character');
+        Route::post('/rooms/{code}/update-connection', [RoomController::class, 'updateConnectionStatus'])
+            ->middleware('auth')
+            ->name('rooms.update_connection');
+        Route::post('/rooms/{code}/enter-with-character', [RoomController::class, 'enterWithCharacter'])->name('rooms.enter_with_character');
         Route::get('/criar', [RoomController::class, 'create'])->name('salas.sala_create');
         Route::post('/criar', [RoomController::class, 'store'])->name('rooms.store');
         Route::get('/entrar', [RoomController::class, 'join'])->name('salas.sala_join');
         Route::post('/entrar', [RoomController::class, 'enter'])->name('rooms.enter');
         Route::get('/{code}', [RoomController::class, 'show'])->name('rooms.show');
-    });
+        Route::get('/sala/{code}/senha', [RoomController::class, 'showPasswordForm'])->name('rooms.password');
+        Route::post('/sala/{code}/senha', [RoomController::class, 'checkPassword'])->name('rooms.check_password');
+            });
 });
 // Redirecionamento da raiz para login
 Route::get('/', function () {

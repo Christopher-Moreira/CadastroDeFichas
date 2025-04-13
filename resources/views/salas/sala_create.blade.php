@@ -57,6 +57,11 @@
             box-shadow: 0 0 15px rgba(108, 92, 231, 0.3);
         }
 
+        .password-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+
         .btn-enchant {
             background: var(--primary-color);
             color: white;
@@ -80,6 +85,10 @@
 
         .portal-link:hover {
             opacity: 0.8;
+        }
+        
+        .password-field {
+            display: none;
         }
     </style>
 </head>
@@ -108,6 +117,29 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="password-switch">
+                                <label class="form-check-label password-toggle" for="password-switch">
+                                    <i class="bi bi-shield-lock me-2"></i>Proteger com senha
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4 password-field">
+                            <input type="password" 
+                                   class="form-control portal-input @error('password') is-invalid @enderror" 
+                                   name="password" 
+                                   placeholder="Senha mágica"
+                                   minlength="4">
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <div class="form-text">
+                                <i class="bi bi-info-circle me-2"></i>A senha deve ter pelo menos 4 caracteres
+                            </div>
+                        </div>
 
                         <button type="submit" class="btn-enchant w-100">
                             <i class="bi bi-magic me-2"></i>Conjurar Realidade
@@ -125,5 +157,23 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordSwitch = document.getElementById('password-switch');
+            const passwordField = document.querySelector('.password-field');
+            const passwordInput = document.querySelector('input[name="password"]');
+            
+            passwordSwitch.addEventListener('change', function() {
+                if (this.checked) {
+                    passwordField.style.display = 'block';
+                    passwordInput.setAttribute('required', 'required');
+                } else {
+                    passwordField.style.display = 'none';
+                    passwordInput.removeAttribute('required');
+                    passwordInput.value = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
